@@ -32,7 +32,7 @@ def load_seer_dataset():
 
     X = pd.DataFrame(data)
     y = convert_to_structured(outcomes["time"], outcomes["event"])
-    return (X, y)
+    return X, y
 
 
 def load_nhanes_dataset():
@@ -41,7 +41,7 @@ def load_nhanes_dataset():
     event = np.array([True if x > 0 else False for x in nhanes_y])
     time = np.array(abs(nhanes_y))
     y = convert_to_structured(time, event)
-    return (X, y)
+    return X, y
 
 
 def load_support_dataset():
@@ -72,42 +72,42 @@ def load_support_dataset():
 
     X = pd.DataFrame(data[feats])
     y = convert_to_structured(outcomes["time"], outcomes["event"])
-    return (X, y)
+    return X, y
 
 
 def load_aids_dataset():
     X, y = datasets.load_aids()
     X = pd.DataFrame(X)
     y = convert_to_structured(y["time"], y["censor"])
-    return (X, y)
+    return X, y
 
 
 def load_veterans_dataset():
     X, y = datasets.load_veterans_lung_cancer()
     X = pd.DataFrame(X)
     y = convert_to_structured(y["Survival_in_days"], y["Status"])
-    return (X, y)
+    return X, y
 
 
 def load_whas500_dataset():
     X, y = datasets.load_whas500()
     X = pd.DataFrame(X)
     y = convert_to_structured(y["lenfol"], y["fstat"])
-    return (X, y)
+    return X, y
 
 
 def load_flchain_dataset():
     X, y = datasets.load_flchain()
     X = pd.DataFrame(X)
     y = convert_to_structured(y["futime"], y["death"])
-    return (X, y)
+    return X, y
 
 
 def load_gbsg2_dataset():
     X, y = datasets.load_gbsg2()
     X = pd.DataFrame(X)
     y = convert_to_structured(y["time"], y["cens"])
-    return (X, y)
+    return X, y
 
 
 def load_metabric_dataset():
@@ -123,4 +123,4 @@ def load_metabric_dataset():
 
     X = pd.DataFrame(data[num_feats])
     y = convert_to_structured(outcomes["time"], outcomes["event"])
-    return (X, y)
+    return X, y
