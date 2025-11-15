@@ -1,9 +1,10 @@
 [project]
 name = "survival-datasets"
 description = "Data loader for common datasets in Survival Analysis."
+version = "0.1.6"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
-license = { file = "LICENSE" }
+license-files = [ "LICENSE" ]
 authors = [
     { name = "Christian Marius Lillelund" }
 ]
@@ -16,7 +17,6 @@ keywords = [
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.8",
@@ -34,7 +34,6 @@ dependencies = [
     "shap>=0.41",
     "pyarrow>=11.0",
 ]
-dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://github.com/thecml/survival-datasets"
@@ -80,7 +79,6 @@ include = ["survdata*"]
 version_scheme = "post-release"
 local_scheme = "no-local-version"
 write_to = "src/survdata/_version.py"
-fallback_version = "0.1.5"
 
 [tool.pytest.ini_options]
 addopts = "-ra -q --cov=survdata --cov-report=term-missing"
