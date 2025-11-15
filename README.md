@@ -11,15 +11,6 @@ A simple data loader for the most common datasets in survival analysis. Currentl
 * FLCHAIN (https://scikit-survival.readthedocs.io/en/stable/api/datasets.html)
 * SEER (from Kaggle, https://www.kaggle.com/code/jnegrini/breast-cancer-dataset)
 
-## Requirements
-
-* Python 3.8 or later
-* scikit-survival 0.17.2 or later
-* pandas 1.4.3 or later
-* numpy 1.22.4 or later
-* shap 0.41 or later
-* pyarrow 11.0 or later
-
 ## Installation
 
 Simply install via pip:
