@@ -1,5 +1,6 @@
-from survdata import datasets
 import sklearn.utils as skut
+
+from survdata import datasets
 
 
 def test_seer_dataset():

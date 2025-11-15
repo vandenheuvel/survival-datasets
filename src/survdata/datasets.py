@@ -3,10 +3,9 @@ __author_email__ = "chr1000@gmail.com"
 
 import numpy as np
 import pandas as pd
+import pkg_resources
 import shap
 from sksurv import datasets
-
-import pkg_resources
 
 resource_package = __name__
 
