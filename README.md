@@ -21,7 +21,7 @@ pip install survival-datasets
 ## Examples
 
 Import the datasets module from the package and load your dataset of choice:
-```
+```python
 from survdata import datasets
 
 if __name__ == "__main__":
