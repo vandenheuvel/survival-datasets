@@ -10,7 +10,7 @@ def test_seer_dataset():
 
 def test_load_nhanes_dataset():
     X, y = datasets.load_nhanes_dataset()
-    skut.check_X_y(X, y, dtype=None, force_all_finite="allow-nan")
+    skut.check_X_y(X, y, dtype=None, ensure_all_finite="allow-nan")
 
 
 def test_load_support_dataset():
@@ -35,7 +35,7 @@ def test_load_whas500_dataset():
 
 def test_load_flchain_dataset():
     X, y = datasets.load_flchain_dataset()
-    skut.check_X_y(X, y, dtype=None, force_all_finite="allow-nan")
+    skut.check_X_y(X, y, dtype=None, ensure_all_finite="allow-nan")
 
 
 def test_load_gbsg2_dataset():
