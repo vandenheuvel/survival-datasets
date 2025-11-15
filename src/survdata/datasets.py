@@ -1,9 +1,10 @@
 __author__ = "Christian Marius Lillelund"
 __author_email__ = "chr1000@gmail.com"
 
+from importlib import resources
+
 import numpy as np
 import pandas as pd
-import pkg_resources
 import shap
 from sksurv import datasets
 
@@ -17,7 +18,7 @@ def convert_to_structured(T, E):
 
 
 def load_seer_dataset():
-    resource = pkg_resources.resource_stream(resource_package, "seer.csv")
+    resource = resources.open_binary(resource_package, "seer.csv")
     data = pd.read_csv(resource)
 
     outcomes = data.copy()
@@ -44,7 +45,7 @@ def load_nhanes_dataset():
 
 
 def load_support_dataset():
-    resource = pkg_resources.resource_stream(resource_package, "support.feather")
+    resource = resources.open_binary(resource_package, "support.feather")
     data = pd.read_feather(resource)
 
     outcomes = data.copy()
@@ -110,7 +111,7 @@ def load_gbsg2_dataset():
 
 
 def load_metabric_dataset():
-    resource = pkg_resources.resource_stream(resource_package, "metabric.feather")
+    resource = resources.open_binary(resource_package, "metabric.feather")
     data = pd.read_feather(resource)
 
     outcomes = data.copy()
