@@ -23,6 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Scientific/Engineering :: Information Analysis",
 ]
@@ -30,7 +31,7 @@ dependencies = [
     "scikit-survival>=0.17.2",
     "pandas>=1.4.3",
     "numpy>=1.22.4",
-    "shap>=0.41",
+    "shap>=0.47.2",
     "pyarrow>=11.0",
 ]
 
