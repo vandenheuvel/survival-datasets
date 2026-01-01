@@ -38,7 +38,8 @@ def _load_and_prepare_freclaimset3fire9207() -> Tuple[pd.DataFrame, pd.DataFrame
     paid_cols = df.columns.str.startswith("paid_Y")
     inc_cols = df.columns.str.startswith("inc_Y")
 
-    X = df.loc[:, ~paid_cols & ~inc_cols].copy()
+    X = df.loc[:, ~paid_cols & ~inc_cols]
+    X = X.rename(columns={c: str(c) for c in X.columns})
     categorical = X.columns != "OccurDate"
     X.loc[:, categorical] = X.loc[:, categorical].astype("category")
     X["OccurDate"] = X["OccurDate"].dt.date
