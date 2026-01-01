@@ -6,16 +6,64 @@ from typing import Dict, Callable, Tuple
 
 import numpy as np
 import pandas as pd
+import rdata
 import shap
 from sksurv import datasets
 
 resource_package = __name__
 
 
-def convert_to_structured(T, E) -> np.typing.NDArray:
-    default_dtypes = {"names": ("event", "time"), "formats": ("bool", "f8")}
-    concat = list(zip(E, T))
+def convert_to_structured(time, event, time_format: str = "f8") -> np.typing.NDArray:
+    default_dtypes = {"names": ("event", "time"), "formats": ("bool", time_format)}
+    concat = list(zip(event, time))
     return np.array(concat, dtype=default_dtypes)
+
+
+def _load_and_prepare_freclaimset3fire9207() -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series]:
+    name = "freclaimset3fire9207"
+    resource = resources.open_binary(resource_package, f"{name}.rda")
+    read_result = rdata.read_rda(
+        resource,
+        constructor_dict=rdata.conversion.DEFAULT_CLASS_MAP | {
+            "Date": lambda raw, _: pd.to_datetime(raw, unit="D"),
+        },
+    )
+    df = read_result[name]
+
+    epsilon = 1e-3
+    total_paid = df["paid_Y0"]
+    last_estimate = df["inc_Y0"]
+    probably_finalized = (total_paid - last_estimate).abs() < epsilon
+
+    paid_cols = df.columns.str.startswith("paid_Y")
+    inc_cols = df.columns.str.startswith("inc_Y")
+
+    X = df.loc[:, ~paid_cols & ~inc_cols].copy()
+    categorical = X.columns != "OccurDate"
+    X.loc[:, categorical] = X.loc[:, categorical].astype("category")
+
+    return df, X, probably_finalized
+
+
+def load_freclaimset3fire9207_duration() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    df, X, probably_finalized = _load_and_prepare_freclaimset3fire9207()
+
+    payment_in_first_year = df["paid_Y15"].gt(0)
+    paid_cols = df.columns.str.startswith("paid_Y")
+    later_payment_years = df.loc[:, paid_cols].diff(axis=1).gt(0).sum(axis=1)
+    payment_years = payment_in_first_year + later_payment_years
+
+    y = convert_to_structured(payment_years, probably_finalized, time_format="u1")
+
+    return X, y
+
+
+def load_freclaimset3fire9207_height() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    df, X, probably_finalized = _load_and_prepare_freclaimset3fire9207()
+    total_paid = df["paid_Y0"]
+    y = convert_to_structured(total_paid, probably_finalized)
+
+    return X, y
 
 
 def load_seer_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
@@ -128,6 +176,8 @@ def load_metabric_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
 
 
 _DATASETS: Dict[str, Callable[[], Tuple[pd.DataFrame, np.typing.NDArray]]] = {
+    "freclaimset3fire9207_duration": load_freclaimset3fire9207_duration,
+    "freclaimset3fire9207_height": load_freclaimset3fire9207_height,
     "seer": load_seer_dataset,
     "nhanes": load_nhanes_dataset,
     "support": load_support_dataset,

@@ -3,6 +3,16 @@ import sklearn.utils as skut
 from survdata import datasets
 
 
+def test_freclaimset3fire9207_duration_dataset():
+    X, y = datasets.load_freclaimset3fire9207_duration()
+    skut.check_X_y(X, y, dtype=None)
+
+
+def test_freclaimset3fire9207_height_dataset():
+    X, y = datasets.load_freclaimset3fire9207_height()
+    skut.check_X_y(X, y, dtype=None)
+
+
 def test_seer_dataset():
     X, y = datasets.load_seer_dataset()
     skut.check_X_y(X, y, dtype=None)
