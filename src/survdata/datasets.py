@@ -41,6 +41,9 @@ def _load_and_prepare_freclaimset3fire9207() -> Tuple[pd.DataFrame, pd.DataFrame
     X = df.loc[:, ~paid_cols & ~inc_cols].copy()
     categorical = X.columns != "OccurDate"
     X.loc[:, categorical] = X.loc[:, categorical].astype("category")
+    X["OccurDate"] = X["OccurDate"].dt.date
+
+    assert not probably_finalized[df.loc[:, paid_cols].eq(0).all(axis=1)].any()
 
     return df, X, probably_finalized
 
@@ -48,12 +51,16 @@ def _load_and_prepare_freclaimset3fire9207() -> Tuple[pd.DataFrame, pd.DataFrame
 def load_freclaimset3fire9207_duration() -> Tuple[pd.DataFrame, np.typing.NDArray]:
     df, X, probably_finalized = _load_and_prepare_freclaimset3fire9207()
 
-    payment_in_first_year = df["paid_Y15"].gt(0)
     paid_cols = df.columns.str.startswith("paid_Y")
-    later_payment_years = df.loc[:, paid_cols].diff(axis=1).gt(0).sum(axis=1)
-    payment_years = payment_in_first_year + later_payment_years
+    last_payment_year_str = df.loc[:, paid_cols].diff(axis=1).gt(0).idxmax(axis=1)
+    last_payment_year_str[df.loc[:, paid_cols].eq(0).all(axis=1)] = "paid_Y0"
+    last_payment_year_int = last_payment_year_str.str.slice(len("paid_Y"), None).astype("int")
+    last_dataset_year = 2007
+    last_payment_year_absolute = last_dataset_year - last_payment_year_int
+    duration = last_payment_year_absolute - df["OccurDate"].dt.year
+    assert duration.ge(0).all()
 
-    y = convert_to_structured(payment_years, probably_finalized, time_format="u1")
+    y = convert_to_structured(duration, probably_finalized, time_format="u1")
 
     return X, y
 
