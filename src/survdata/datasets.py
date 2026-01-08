@@ -124,6 +124,30 @@ def load_gbsg2_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
     return X, y
 
 
+def load_lossalaefull_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load the lossalaefull dataset.
+
+    Claims with an indemnity payment and an allocated loss adjustment expense.
+
+    Primary source: Frees, E. W. and Valdez, E. A. (1998) Understanding relationships using copulas. North American
+    Actuarial Journal, 2, 1–15, doi:10.1080/10920277.1998.10595749.
+
+    https://web.archive.org/web/20260108182026/https://dutangc.github.io/CASdatasets/reference/lossalae.html
+    """
+    name = "lossalaefull"
+    resource = resources.open_binary(resource_package, f"{name}.rda")
+    read_result = rdata.read_rda(resource)
+    X = read_result[name]
+
+    time = X.pop("Loss")
+    event = ~X.pop("Censored").astype("bool")
+
+    X = X.astype("float").fillna(np.nan)
+    y = convert_to_structured(time, event)
+
+    return X, y
+
 def load_metabric_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
     """
     Load the METABRIC (The Molecular Taxonomy of Breast Cancer International Consortium) dataset
@@ -249,6 +273,7 @@ _DATASETS: Dict[str, Callable[[], Tuple[pd.DataFrame, np.typing.NDArray]]] = {
     "freclaimset3fire9207_duration": load_freclaimset3fire9207_duration,
     "freclaimset3fire9207_height": load_freclaimset3fire9207_height,
     "gbsg2": load_gbsg2_dataset,
+    "lossalaefull": load_lossalaefull_dataset,
     "metabric": load_metabric_dataset,
     "nhanes": load_nhanes_dataset,
     "seer": load_seer_dataset,

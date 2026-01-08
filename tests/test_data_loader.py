@@ -7,6 +7,7 @@ from survdata import AVAILABLE_DATASETS, load_dataset
 def test_load_dataset(name):
     nans_allowed = {
         "flchain",
+        "lossalaefull",
         "nhanes",
     }
 
