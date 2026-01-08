@@ -20,6 +20,11 @@ def convert_to_structured(time, event, time_format: str = "f8") -> np.typing.NDA
 
 
 def load_aids_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load and return the AIDS Clinical Trial dataset
+
+    https://web.archive.org/web/20170114043458/http://www.umass.edu/statdata/statdata/data/
+    """
     X, y = datasets.load_aids()
     X = pd.DataFrame(X)
     y = convert_to_structured(y["time"], y["censor"])
@@ -27,6 +32,11 @@ def load_aids_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
 
 
 def load_flchain_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load and return assay of serum free light chain for 7874 subjects.
+
+    Primary source: https://doi.org/10.1016/j.mayocp.2012.03.009
+    """
     X, y = datasets.load_flchain()
     X = pd.DataFrame(X)
     y = convert_to_structured(y["futime"], y["death"])
@@ -64,6 +74,13 @@ def _load_and_prepare_freclaimset3fire9207() -> Tuple[pd.DataFrame, pd.DataFrame
 
 
 def load_freclaimset3fire9207_duration() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load a duration-focused tranformation of the freclaimset3fire9207 data set.
+
+    For modeling how long it takes to process claims.
+
+    https://web.archive.org/web/20260108180915/https://dutangc.github.io/CASdatasets/reference/freclaimset9207.html
+    """
     df, X, probably_finalized = _load_and_prepare_freclaimset3fire9207()
 
     paid_cols = df.columns.str.startswith("paid_Y")
@@ -81,6 +98,13 @@ def load_freclaimset3fire9207_duration() -> Tuple[pd.DataFrame, np.typing.NDArra
 
 
 def load_freclaimset3fire9207_height() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load a loss-focused tranformation of the freclaimset3fire9207 data set.
+
+    For modeling how much will be paid in total until the claim is fully processed.
+
+    https://web.archive.org/web/20260108180915/https://dutangc.github.io/CASdatasets/reference/freclaimset9207.html
+    """
     df, X, probably_finalized = _load_and_prepare_freclaimset3fire9207()
     total_paid = df["paid_Y0"]
     y = convert_to_structured(total_paid, probably_finalized)
@@ -89,6 +113,11 @@ def load_freclaimset3fire9207_height() -> Tuple[pd.DataFrame, np.typing.NDArray]
 
 
 def load_gbsg2_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load and return the German Breast Cancer Study Group 2 dataset
+
+    Primary source: http://ascopubs.org/doi/abs/10.1200/jco.1994.12.10.2086
+    """
     X, y = datasets.load_gbsg2()
     X = pd.DataFrame(X)
     y = convert_to_structured(y["time"], y["cens"])
@@ -96,6 +125,11 @@ def load_gbsg2_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
 
 
 def load_metabric_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load the METABRIC (The Molecular Taxonomy of Breast Cancer International Consortium) dataset
+
+    From the DeepSurv paper: https://arxiv.org/abs/1606.00931
+    """
     resource = resources.open_binary(resource_package, "metabric.feather")
     data = pd.read_feather(resource)
 
@@ -112,6 +146,11 @@ def load_metabric_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
 
 
 def load_nhanes_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load a nicely packaged version of NHANES I data with survival times as labels.
+
+    https://web.archive.org/web/20260108183811/https://shap.readthedocs.io/en/latest/generated/shap.datasets.nhanesi.html
+    """
     nhanes_X, nhanes_y = shap.datasets.nhanesi()
     X = pd.DataFrame(nhanes_X)
     event = np.array([True if x > 0 else False for x in nhanes_y])
@@ -121,6 +160,11 @@ def load_nhanes_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
 
 
 def load_seer_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load data about breast cancer patients from the SEER Program of the NCI (2017).
+
+    Primary source: https://web.archive.org/web/20260108190848/https://www.kaggle.com/code/jnegrini/breast-cancer-dataset
+    """
     resource = resources.open_binary(resource_package, "seer.csv")
     data = pd.read_csv(resource)
 
@@ -139,6 +183,11 @@ def load_seer_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
 
 
 def load_support_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load Study to Understand Prognoses Preferences Outcomes and Risks of Treatment data.
+
+    From the DeepSurv paper: https://arxiv.org/abs/1606.00931
+    """
     resource = resources.open_binary(resource_package, "support.feather")
     data = pd.read_feather(resource)
 
@@ -170,6 +219,12 @@ def load_support_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
 
 
 def load_veterans_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load data from the Veterans' Administration Lung Cancer Trial.
+
+    The Statistical Analysis of Failure Time Data, by John D. Kalbfleisch, Ross L. Prentice, 26 August 2002.
+    Print ISBN:9780471363576 |Online ISBN:9781118032985 |DOI:10.1002/9781118032985
+    """
     X, y = datasets.load_veterans_lung_cancer()
     X = pd.DataFrame(X)
     y = convert_to_structured(y["Survival_in_days"], y["Status"])
@@ -177,6 +232,11 @@ def load_veterans_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
 
 
 def load_whas500_dataset() -> Tuple[pd.DataFrame, np.typing.NDArray]:
+    """
+    Load the Worcester Heart Attack Study dataset.
+
+    https://web.archive.org/web/20170114043458/http://www.umass.edu/statdata/statdata/data/
+    """
     X, y = datasets.load_whas500()
     X = pd.DataFrame(X)
     y = convert_to_structured(y["lenfol"], y["fstat"])
