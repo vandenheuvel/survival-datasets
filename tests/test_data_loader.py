@@ -1,58 +1,18 @@
+import pytest
 import sklearn.utils as skut
 
-from survdata import datasets
+from survdata import AVAILABLE_DATASETS, load_dataset
 
+@pytest.mark.parametrize("name", AVAILABLE_DATASETS)
+def test_load_dataset(name):
+    nans_allowed = {
+        "flchain",
+        "nhanes",
+    }
 
-def test_freclaimset3fire9207_duration_dataset():
-    X, y = datasets.load_freclaimset3fire9207_duration()
-    skut.check_X_y(X, y, dtype=None)
+    check_args = {}
+    if name in nans_allowed:
+        check_args["ensure_all_finite"] = "allow-nan"
 
-
-def test_freclaimset3fire9207_height_dataset():
-    X, y = datasets.load_freclaimset3fire9207_height()
-    skut.check_X_y(X, y, dtype=None)
-
-
-def test_seer_dataset():
-    X, y = datasets.load_seer_dataset()
-    skut.check_X_y(X, y, dtype=None)
-
-
-def test_load_nhanes_dataset():
-    X, y = datasets.load_nhanes_dataset()
-    skut.check_X_y(X, y, dtype=None, ensure_all_finite="allow-nan")
-
-
-def test_load_support_dataset():
-    X, y = datasets.load_support_dataset()
-    skut.check_X_y(X, y, dtype=None)
-
-
-def test_load_aids_dataset():
-    X, y = datasets.load_aids_dataset()
-    skut.check_X_y(X, y, dtype=None)
-
-
-def test_load_veterans_dataset():
-    X, y = datasets.load_veterans_dataset()
-    skut.check_X_y(X, y, dtype=None)
-
-
-def test_load_whas500_dataset():
-    X, y = datasets.load_whas500_dataset()
-    skut.check_X_y(X, y, dtype=None)
-
-
-def test_load_flchain_dataset():
-    X, y = datasets.load_flchain_dataset()
-    skut.check_X_y(X, y, dtype=None, ensure_all_finite="allow-nan")
-
-
-def test_load_gbsg2_dataset():
-    X, y = datasets.load_gbsg2_dataset()
-    skut.check_X_y(X, y, dtype=None)
-
-
-def test_load_metabric_dataset():
-    X, y = datasets.load_metabric_dataset()
-    skut.check_X_y(X, y, dtype=None)
+    X, y = load_dataset(name)
+    skut.check_X_y(X, y, dtype=None, **check_args)
